@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Sistemas — Generadores y Pruebas</title>
+</head>
+<body>
+    <header class="header">
+  <div class="logo">
+    <div class="logo-icon">SIM</div>
+    <div>
+      <div class="header-title">Simulación de Sistemas</div>
+      <div class="header-sub">Generadores · Pruebas Estadísticas · Cap. 2</div>
+    </div>
+  </div>
+  <div class="header-badge">Banks, Carson, Nelson &amp; Nicol</div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Generadores</div>
+      <button class="nav-btn active" onclick="show('cuadrados',this)">
+        <span class="num">2.1</span> Cuadrados medios <span class="tag tag-gen">GEN</span>
+      </button>
+      <button class="nav-btn" onclick="show('productos',this)">
+        <span class="num">2.2</span> Productos medios <span class="tag tag-gen">GEN</span>
+      </button>
+      <button class="nav-btn" onclick="show('constante',this)">
+        <span class="num">2.3</span> Mult. constante <span class="tag tag-gen">GEN</span>
+      </button>
+      <button class="nav-btn" onclick="show('lineal',this)">
+        <span class="num">2.4</span> Congruencial lineal <span class="tag tag-gen">GEN</span>
+      </button>
+      <button class="nav-btn" onclick="show('multiplicativo',this)">
+        <span class="num">2.5</span> Congruencial mult. <span class="tag tag-gen">GEN</span>
+      </button>
+      <button class="nav-btn" onclick="show('aditivo',this)">
+        <span class="num">2.6</span> Congruencial aditivo <span class="tag tag-gen">GEN</span>
+      </button>
+      <button class="nav-btn" onclick="show('nolineal',this)">
+        <span class="num">2.7</span> Congruencial cuadr. <span class="tag tag-gen">GEN</span>
+      </button>
+      <button class="nav-btn" onclick="show('blum',this)">
+        <span class="num">2.8</span> Blum, Blum y Shub <span class="tag tag-gen">GEN</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Valor esperado</div>
+      <button class="nav-btn" onclick="show('means',this)">
+        <span class="num">2.4.1</span> Medias <span class="dot"></span>
+      </button>
+      <button class="nav-btn" onclick="show('variance',this)">
+        <span class="num">2.4.2</span> Varianza <span class="dot"></span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Uniformidad</div>
+      <button class="nav-btn" onclick="show('chisq',this)">
+        <span class="num">2.4.3.1</span> Chi-cuadrada <span class="dot"></span>
+      </button>
+      <button class="nav-btn" onclick="show('ks',this)">
+        <span class="num">2.4.3.2</span> Kolmogorov-Smirnov <span class="dot"></span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Independencia</div>
+      <button class="nav-btn" onclick="show('runs',this)">
+        <span class="num">2.4.4.1</span> Corridas ↑↓ <span class="dot"></span>
+      </button>
+      <button class="nav-btn" onclick="show('runsmean',this)">
+        <span class="num">2.4.4.2</span> Corridas media <span class="dot"></span>
+      </button>
+      <button class="nav-btn" onclick="show('poker',this)">
+        <span class="num">2.4.4.3</span> Póker <span class="dot"></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <!-- ══════════════════════════════════════════════
+         GENERADORES
+    ══════════════════════════════════════════════ -->
+
+    <!-- CUADRADOS MEDIOS -->
+    <div id="cuadrados" class="panel active">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-gen">GENERADOR</span> Sección 2.1</div>
+        <h1 class="panel-title">Cuadrados Medios</h1>
+        <p class="panel-desc">Genera números pseudoaleatorios elevando al cuadrado la semilla y extrayendo los D dígitos centrales del resultado.</p>
+      </div>
+      <div class="info-box warn"><span class="icon">⚠</span><span>La semilla debe tener <b>más de 3 dígitos</b>. El algoritmo puede degenerar rápidamente.</span></div>
+      <div class="form-grid">
+        <div class="form-group"><div class="form-label">Semilla X₀</div><input type="number" id="cm_x0" placeholder="Ej: 5765"></div>
+        <div class="form-group"><div class="form-label">Cantidad n</div><input type="number" id="cm_n" value="10"></div>
+      </div>
+      <button class="btn-run purple" onclick="generarCuadradosMedios()">Generar →</button>
+      <div id="cm_error" style="color:var(--red);font-size:12px;margin-top:8px"></div>
+      <div id="cm_result"></div>
+    </div>
+
+    <!-- PRODUCTOS MEDIOS -->
+    <div id="productos" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-gen">GENERADOR</span> Sección 2.2</div>
+        <h1 class="panel-title">Productos Medios</h1>
+        <p class="panel-desc">Multiplica dos semillas consecutivas y extrae los D dígitos centrales del producto.</p>
+      </div>
+      <div class="info-box warn"><span class="icon">⚠</span><span>Ambas semillas deben tener <b>el mismo número de dígitos</b> (D &gt; 3).</span></div>
+      <div class="form-grid">
+        <div class="form-group"><div class="form-label">Semilla X₀</div><input type="number" id="pm_x0" placeholder="Ej: 5765"></div>
+        <div class="form-group"><div class="form-label">Semilla X₁</div><input type="number" id="pm_x1" placeholder="Ej: 3891"></div>
+        <div class="form-group"><div class="form-label">Cantidad n</div><input type="number" id="pm_n" value="10"></div>
+      </div>
+      <button class="btn-run purple" onclick="generarProductosMedios()">Generar →</button>
+      <div id="pm_error" style="color:var(--red);font-size:12px;margin-top:8px"></div>
+      <div id="pm_result"></div>
+    </div>
+
+    <!-- MULTIPLICADOR CONSTANTE -->
+    <div id="constante" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-gen">GENERADOR</span> Sección 2.3</div>
+        <h1 class="panel-title">Multiplicador Constante</h1>
+        <p class="panel-desc">Multiplica la semilla por una constante fija y extrae los D dígitos centrales.</p>
+      </div>
+      <div class="info-box warn"><span class="icon">⚠</span><span>Semilla y constante deben tener <b>D &gt; 3 dígitos</b>.</span></div>
+      <div class="form-grid">
+        <div class="form-group"><div class="form-label">Semilla X₀</div><input type="number" id="mc_x0" placeholder="Ej: 5765"></div>
+        <div class="form-group"><div class="form-label">Constante a</div><input type="number" id="mc_a" placeholder="Ej: 3187"></div>
+        <div class="form-group"><div class="form-label">Cantidad n</div><input type="number" id="mc_n" value="10"></div>
+      </div>
+      <button class="btn-run purple" onclick="generarMultiplicadorConstante()">Generar →</button>
+      <div id="mc_error" style="color:var(--red);font-size:12px;margin-top:8px"></div>
+      <div id="mc_result"></div>
+    </div>
+
+    <!-- CONGRUENCIAL LINEAL -->
+    <div id="lineal" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-gen">GENERADOR</span> Sección 2.4</div>
+        <h1 class="panel-title">Congruencial Lineal</h1>
+        <p class="panel-desc">Xᵢ₊₁ = (aXᵢ + c) mod m — el más utilizado en la práctica por su período largo y buen comportamiento estadístico.</p>
+      </div>
+      <div class="info-box warn"><span class="icon">⚠</span><span>Si el problema da <b>k</b> y <b>g</b>, calcule primero: <b>a = 1 + 4k</b> y <b>m = 2<sup>g</sup></b>. Ingrese aquí los valores finales.</span></div>
+      <div class="form-grid">
+        <div class="form-group"><div class="form-label">Semilla X₀</div><input type="number" id="cl_x0" placeholder="Ej: 27"></div>
+        <div class="form-group"><div class="form-label">Multiplicador a</div><input type="number" id="cl_a" placeholder="Ej: 5"></div>
+        <div class="form-group"><div class="form-label">Constante c</div><input type="number" id="cl_c" placeholder="Ej: 1"></div>
+        <div class="form-group"><div class="form-label">Módulo m</div><input type="number" id="cl_m" placeholder="Ej: 32"></div>
+        <div class="form-group"><div class="form-label">Cantidad n</div><input type="number" id="cl_n" value="10"></div>
+      </div>
+      <button class="btn-run purple" onclick="generarLineal()">Generar →</button>
+      <div id="cl_error" style="color:var(--red);font-size:12px;margin-top:8px"></div>
+      <div id="cl_result"></div>
+    </div>
+
+    <!-- CONGRUENCIAL MULTIPLICATIVO -->
+    <div id="multiplicativo" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-gen">GENERADOR</span> Sección 2.5</div>
+        <h1 class="panel-title">Congruencial Multiplicativo</h1>
+        <p class="panel-desc">Xᵢ₊₁ = (aXᵢ) mod m — variante del lineal con c = 0, más eficiente computacionalmente.</p>
+      </div>
+      <div class="info-box warn"><span class="icon">⚠</span><span>Si el problema da <b>k</b> y <b>g</b>, calcule: <b>a = 5 + 8k</b> (o 3 + 8k) y <b>m = 2<sup>g</sup></b>.</span></div>
+      <div class="form-grid">
+        <div class="form-group"><div class="form-label">Semilla X₀</div><input type="number" id="cmu_x0" placeholder="Ej: 13"></div>
+        <div class="form-group"><div class="form-label">Multiplicador a</div><input type="number" id="cmu_a" placeholder="Ej: 5"></div>
+        <div class="form-group"><div class="form-label">Módulo m</div><input type="number" id="cmu_m" placeholder="Ej: 32"></div>
+        <div class="form-group"><div class="form-label">Cantidad n</div><input type="number" id="cmu_n" value="10"></div>
+      </div>
+      <button class="btn-run purple" onclick="generarMultiplicativo()">Generar →</button>
+      <div id="cmu_error" style="color:var(--red);font-size:12px;margin-top:8px"></div>
+      <div id="cmu_result"></div>
+    </div>
+
+    <!-- CONGRUENCIAL ADITIVO -->
+    <div id="aditivo" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-gen">GENERADOR</span> Sección 2.6</div>
+        <h1 class="panel-title">Congruencial Aditivo</h1>
+        <p class="panel-desc">Xᵢ = (Xᵢ₋₁ + Xᵢ₋ₙ) mod m — utiliza una secuencia de semillas iniciales para generar nuevos valores.</p>
+      </div>
+      <div class="info-box info"><span class="icon">ℹ</span><span>Ingrese las semillas iniciales <b>separadas por coma</b>. Ej: <code style="font-family:var(--mono);font-size:11px">65, 89, 98, 3, 69</code></span></div>
+      <div class="form-group"><div class="form-label">Semillas iniciales (separadas por coma)</div><input type="text" id="ca_secuencia" placeholder="65, 89, 98, 3, 69"></div>
+      <div class="form-grid">
+        <div class="form-group"><div class="form-label">Módulo m</div><input type="number" id="ca_m" placeholder="Ej: 100"></div>
+        <div class="form-group"><div class="form-label">Cantidad n</div><input type="number" id="ca_n" value="10"></div>
+      </div>
+      <button class="btn-run purple" onclick="generarAditivo()">Generar →</button>
+      <div id="ca_error" style="color:var(--red);font-size:12px;margin-top:8px"></div>
+      <div id="ca_result"></div>
+    </div>
+
+    <!-- CONGRUENCIAL CUADRÁTICO -->
+    <div id="nolineal" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-gen">GENERADOR</span> Sección 2.7</div>
+        <h1 class="panel-title">Congruencial Cuadrático</h1>
+        <p class="panel-desc">Xᵢ₊₁ = (aXᵢ² + bXᵢ + c) mod m — extiende el método lineal con un término cuadrático.</p>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><div class="form-label">Semilla X₀</div><input type="number" id="cnl_x0"></div>
+        <div class="form-group"><div class="form-label">Constante a</div><input type="number" id="cnl_a"></div>
+        <div class="form-group"><div class="form-label">Constante b</div><input type="number" id="cnl_b"></div>
+        <div class="form-group"><div class="form-label">Constante c</div><input type="number" id="cnl_c"></div>
+        <div class="form-group"><div class="form-label">Módulo m</div><input type="number" id="cnl_m"></div>
+        <div class="form-group"><div class="form-label">Cantidad n</div><input type="number" id="cnl_n" value="10"></div>
+      </div>
+      <button class="btn-run purple" onclick="generarNoLineal()">Generar →</button>
+      <div id="cnl_error" style="color:var(--red);font-size:12px;margin-top:8px"></div>
+      <div id="cnl_result"></div>
+    </div>
+
+    <!-- BLUM BLUM SHUB -->
+    <div id="blum" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-gen">GENERADOR</span> Sección 2.8</div>
+        <h1 class="panel-title">Blum, Blum y Shub</h1>
+        <p class="panel-desc">Xᵢ₊₁ = Xᵢ² mod m — generador criptográficamente seguro donde m = p·q con p, q primos ≡ 3 (mod 4).</p>
+      </div>
+      <div class="info-box info"><span class="icon">ℹ</span><span>Ingrese el valor final calculado del módulo <b>m = p · q</b>.</span></div>
+      <div class="form-grid">
+        <div class="form-group"><div class="form-label">Semilla X₀</div><input type="number" id="bbs_x0"></div>
+        <div class="form-group"><div class="form-label">Módulo m</div><input type="number" id="bbs_m"></div>
+        <div class="form-group"><div class="form-label">Cantidad n</div><input type="number" id="bbs_n" value="10"></div>
+      </div>
+      <button class="btn-run purple" onclick="generarBlum()">Generar →</button>
+      <div id="bbs_error" style="color:var(--red);font-size:12px;margin-top:8px"></div>
+      <div id="bbs_result"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         PRUEBAS ESTADÍSTICAS
+    ══════════════════════════════════════════════ -->
+
+    <!-- MEDIAS -->
+    <div id="means" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-test">PRUEBA</span> Sección 2.4.1 · Ejemplo 2.11</div>
+        <h1 class="panel-title">Prueba de medias</h1>
+        <p class="panel-desc">Verifica que el valor esperado del conjunto rᵢ sea igual a 0.5 usando límites de aceptación de la distribución normal estándar.</p>
+      </div>
+      <div class="hyp-box">
+        <div class="hyp-item"><div class="hyp-label">Hipótesis nula</div><div class="hyp-formula">H₀ : μ<sub>rᵢ</sub> = 0.5</div></div>
+        <div class="hyp-item"><div class="hyp-label">Hipótesis alternativa</div><div class="hyp-formula">H₁ : μ<sub>rᵢ</sub> ≠ 0.5</div></div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Números rᵢ <button class="example-link" onclick="loadEx('means-data',EXAMPLES.means)">Ej. 2.11</button></div>
+        <textarea id="means-data" placeholder="0.0449, 0.1733, 0.5746 ..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <div class="form-label">Nivel de confianza (z<sub>α/2</sub>)</div>
+          <select id="means-z">
+            <option value="1.645">90% → z = 1.645</option>
+            <option value="1.96" selected>95% → z = 1.96</option>
+            <option value="2.326">98% → z = 2.326</option>
+            <option value="2.576">99% → z = 2.576</option>
+          </select>
+        </div>
+        <button class="btn-run" onclick="runMeans()">Calcular →</button>
+      </div>
+      <div id="means-result"></div>
+    </div>
+
+    <!-- VARIANZA -->
+    <div id="variance" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-test">PRUEBA</span> Sección 2.4.2 · Ejemplo 2.12</div>
+        <h1 class="panel-title">Prueba de varianza</h1>
+        <p class="panel-desc">Verifica que la varianza del conjunto rᵢ sea igual a 1/12 ≈ 0.08333 usando cuantiles de la distribución Chi-cuadrada.</p>
+      </div>
+      <div class="hyp-box">
+        <div class="hyp-item"><div class="hyp-label">Hipótesis nula</div><div class="hyp-formula">H₀ : σ²<sub>rᵢ</sub> = 1/12</div></div>
+        <div class="hyp-item"><div class="hyp-label">Hipótesis alternativa</div><div class="hyp-formula">H₁ : σ²<sub>rᵢ</sub> ≠ 1/12</div></div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Números rᵢ <button class="example-link" onclick="loadEx('variance-data',EXAMPLES.means)">Ej. 2.12</button></div>
+        <textarea id="variance-data" placeholder="0.0449, 0.1733 ..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">Nivel α</div><input type="number" id="variance-alpha" value="0.05" step="0.01"></div>
+        <button class="btn-run" onclick="runVariance()">Calcular →</button>
+      </div>
+      <div id="variance-result"></div>
+    </div>
+
+    <!-- CHI-CUADRADA -->
+    <div id="chisq" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-test">PRUEBA</span> Sección 2.4.3.1 · Ejemplo 2.13</div>
+        <h1 class="panel-title">Prueba Chi-cuadrada</h1>
+        <p class="panel-desc">Divide (0,1) en m = √n subintervalos y compara frecuencias observadas Oᵢ con esperadas Eᵢ = n/m.</p>
+      </div>
+      <div class="hyp-box">
+        <div class="hyp-item"><div class="hyp-label">Hipótesis nula</div><div class="hyp-formula">H₀ : rᵢ ~ U(0,1)</div></div>
+        <div class="hyp-item"><div class="hyp-label">Hipótesis alternativa</div><div class="hyp-formula">H₁ : rᵢ no son uniformes</div></div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Números rᵢ <button class="example-link" onclick="loadEx('chisq-data',EXAMPLES.chisq)">Ej. 2.13</button></div>
+        <textarea id="chisq-data" placeholder="0.347, 0.832, 0.966 ..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">Nivel α</div><input type="number" id="chisq-alpha" value="0.05" step="0.01"></div>
+        <button class="btn-run" onclick="runChiSq()">Calcular →</button>
+      </div>
+      <div id="chisq-result"></div>
+    </div>
+
+    <!-- KS -->
+    <div id="ks" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-test">PRUEBA</span> Sección 2.4.3.2 · Ejemplo 2.14</div>
+        <h1 class="panel-title">Kolmogorov-Smirnov</h1>
+        <p class="panel-desc">Recomendada para n &lt; 20. Calcula la máxima diferencia D entre la distribución empírica y la uniforme teórica.</p>
+      </div>
+      <div class="hyp-box">
+        <div class="hyp-item"><div class="hyp-label">Hipótesis nula</div><div class="hyp-formula">H₀ : rᵢ ~ U(0,1)</div></div>
+        <div class="hyp-item"><div class="hyp-label">Hipótesis alternativa</div><div class="hyp-formula">H₁ : rᵢ no son uniformes</div></div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Números rᵢ (recom. n &lt; 20) <button class="example-link" onclick="loadEx('ks-data',EXAMPLES.ks)">Ej. 2.14</button></div>
+        <textarea id="ks-data" placeholder="0.97, 0.11, 0.65 ..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">Nivel α</div><input type="number" id="ks-alpha" value="0.10" step="0.01"></div>
+        <button class="btn-run" onclick="runKS()">Calcular →</button>
+      </div>
+      <div id="ks-result"></div>
+    </div>
+
+    <!-- CORRIDAS -->
+    <div id="runs" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-test">PRUEBA</span> Sección 2.4.4.1 · Ejemplo 2.15</div>
+        <h1 class="panel-title">Prueba de corridas ↑↓</h1>
+        <p class="panel-desc">Construye S asignando 1 si rᵢ &gt; rᵢ₋₁ (sube) y 0 si rᵢ ≤ rᵢ₋₁ (baja). Evalúa independencia por número de corridas.</p>
+      </div>
+      <div class="hyp-box">
+        <div class="hyp-item"><div class="hyp-label">Hipótesis nula</div><div class="hyp-formula">H₀ : rᵢ independientes</div></div>
+        <div class="hyp-item"><div class="hyp-label">Hipótesis alternativa</div><div class="hyp-formula">H₁ : rᵢ no independientes</div></div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Números rᵢ <button class="example-link" onclick="loadEx('runs-data',EXAMPLES.runs)">Ej. 2.15</button></div>
+        <textarea id="runs-data" placeholder="0.34, 0.83, 0.96 ..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">Nivel α</div><input type="number" id="runs-alpha" value="0.05" step="0.01"></div>
+        <button class="btn-run" onclick="runRuns()">Calcular →</button>
+      </div>
+      <div id="runs-result"></div>
+    </div>
+
+    <!-- CORRIDAS MEDIA -->
+    <div id="runsmean" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-test">PRUEBA</span> Sección 2.4.4.2 · Ejemplo 2.16</div>
+        <h1 class="panel-title">Corridas arriba/abajo de la media</h1>
+        <p class="panel-desc">Asigna 1 si rᵢ ≥ 0.5, 0 si rᵢ &lt; 0.5. Determina n₀ y n₁ y evalúa el número de corridas respecto a la media.</p>
+      </div>
+      <div class="hyp-box">
+        <div class="hyp-item"><div class="hyp-label">Hipótesis nula</div><div class="hyp-formula">H₀ : rᵢ independientes</div></div>
+        <div class="hyp-item"><div class="hyp-label">Hipótesis alternativa</div><div class="hyp-formula">H₁ : rᵢ no independientes</div></div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Números rᵢ <button class="example-link" onclick="loadEx('runsmean-data',EXAMPLES.runsmean)">Ej. 2.16</button></div>
+        <textarea id="runsmean-data" placeholder="0.809, 0.042, 0.432 ..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">Nivel α</div><input type="number" id="runsmean-alpha" value="0.05" step="0.01"></div>
+        <button class="btn-run" onclick="runRunsMean()">Calcular →</button>
+      </div>
+      <div id="runsmean-result"></div>
+    </div>
+
+    <!-- PÓKER -->
+    <div id="poker" class="panel">
+      <div class="panel-header">
+        <div class="panel-tag"><span class="badge badge-test">PRUEBA</span> Sección 2.4.4.3 · Ejemplo 2.17</div>
+        <h1 class="panel-title">Prueba póker</h1>
+        <p class="panel-desc">Clasifica cada número con 5 decimales como mano de póker: TD, 1P, 2P, TP, T, P, Q. Aplica Chi-cuadrada con gl = 6.</p>
+      </div>
+      <div class="hyp-box">
+        <div class="hyp-item"><div class="hyp-label">Hipótesis nula</div><div class="hyp-formula">H₀ : rᵢ independientes</div></div>
+        <div class="hyp-item"><div class="hyp-label">Hipótesis alternativa</div><div class="hyp-formula">H₁ : rᵢ no independientes</div></div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Números rᵢ con 5 decimales <button class="example-link" onclick="loadEx('poker-data',EXAMPLES.poker)">Ej. 2.17</button></div>
+        <textarea id="poker-data" placeholder="0.06141, 0.72484, 0.94107 ..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><div class="form-label">Nivel α</div><input type="number" id="poker-alpha" value="0.05" step="0.01"></div>
+        <button class="btn-run" onclick="runPoker()">Calcular →</button>
+      </div>
+      <div id="poker-result"></div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
